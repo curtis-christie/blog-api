@@ -7,14 +7,19 @@ import {
   updatePost,
   deletePost,
 } from "../controllers/posts.controller.js";
+import { validate } from "../middleware/validate.js";
+import { createPostSchema } from "../schemas/post.schema.js";
+import { requireAuth } from "../middleware/requireAuth.js";
 
 const postsRouter = Router();
 
 postsRouter.get("/", getAllPosts);
 postsRouter.get("/:postId", getPost);
-postsRouter.get("/own/:authorId", getOwnPosts);
-postsRouter.post("/", createPost);
-postsRouter.put("/:postId", updatePost);
-postsRouter.delete("/:postId", deletePost);
+
+// Protected Routes
+postsRouter.get("/own/", requireAuth, getOwnPosts);
+postsRouter.post("/", requireAuth, validate(createPostSchema), createPost);
+postsRouter.put("/:postId", requireAuth, updatePost);
+postsRouter.delete("/:postId", requireAuth, deletePost);
 
 export default postsRouter;
