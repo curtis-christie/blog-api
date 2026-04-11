@@ -1,0 +1,52 @@
+ROUTES
+---------
+post routes -
+GET
+/api/posts
+/api/posts/:postId
+/api/posts/:authorId = protected route for admin to view/edit/delete posts
+POST
+/api/posts
+PUT
+/api/posts/:postId
+DELETE
+/api/posts/:postId
+
+comment routes -
+GET
+/api/comments/:postId/
+/api/comments/:commentId
+POST
+/api/comments/:postId/
+DELETE
+/api/comments/:commentId
+
+auth routes -
+POST
+X /api/register
+X /api/login
+X /api/logout
+X /api/me
+
+
+other routes -
+/api/userDashboard
+/api/home
+
+CONTROLLERS
+---------
+post controller -
+getPosts
+getOwnPosts - protected, allows author to view/edit/delete posts
+getPostById
+createPost
+updatePost
+deletePost
+
+comment controller -
+getCommentsByPostId
+getCommentsByCommentId
+createComment
+deleteComment
+
+
