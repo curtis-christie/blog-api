@@ -2,15 +2,15 @@ ROUTES
 ---------
 post routes -
 GET
-/api/posts
-/api/posts/:postId
-/api/posts/:authorId = protected route for admin to view/edit/delete posts
+X /api/posts
+X /api/posts/:postId
+X /api/posts/:authorId = protected route for admin to view/edit/delete posts
 POST
-/api/posts
+X /api/posts
 PUT
-/api/posts/:postId
+X /api/posts/:postId
 DELETE
-/api/posts/:postId
+X /api/posts/:postId
 
 comment routes -
 GET
@@ -36,12 +36,12 @@ other routes -
 CONTROLLERS
 ---------
 post controller -
-getPosts
-getOwnPosts - protected, allows author to view/edit/delete posts
-getPostById
-createPost
-updatePost
-deletePost
+X getPosts
+X getOwnPosts - protected, allows author to view/edit/delete posts
+X getPostById
+X createPost
+X updatePost
+X deletePost
 
 comment controller -
 getCommentsByPostId
