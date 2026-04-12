@@ -76,7 +76,7 @@ async function createComment(req, res, next) {
     const { content } = req.body;
     const { postId } = req.params;
 
-    const post = prisma.post.findUnique({
+    const post = await prisma.post.findUnique({
       where: { id: postId },
       select: { id: true },
     });

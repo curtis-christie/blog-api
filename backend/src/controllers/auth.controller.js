@@ -10,7 +10,9 @@ async function register(req, res, next) {
     const { username, email, password } = req.body;
 
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: {
+        OR: [{ email: email }, { username: username }],
+      },
     });
 
     if (existingUser) {
@@ -125,6 +127,7 @@ async function logout(req, res, next) {
 async function refresh(req, res, next) {
   try {
     const token = req.cookies.refreshToken;
+    const isProduction = process.env.NODE_ENV === "production";
 
     if (!token) {
       throw new AppError("No refresh token", 401);
@@ -139,7 +142,7 @@ async function refresh(req, res, next) {
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 1000 * 60 * 15,
     });
 
