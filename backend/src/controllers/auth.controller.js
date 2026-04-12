@@ -35,8 +35,6 @@ async function register(req, res, next) {
 
     const accessToken = signAccessToken({
       sub: user.id,
-      username: user.username,
-      email: user.email,
     });
 
     const refreshToken = signRefreshToken({
@@ -75,8 +73,6 @@ async function login(req, res, next) {
 
     const accessToken = signAccessToken({
       sub: user.id,
-      username: user.username,
-      email: user.email,
     });
 
     const refreshToken = signRefreshToken({
@@ -108,6 +104,13 @@ async function logout(req, res, next) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
     res.status(200).json({

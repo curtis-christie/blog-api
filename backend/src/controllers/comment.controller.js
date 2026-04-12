@@ -35,37 +35,55 @@ async function getComment(req, res, next) {
 }
 // getPostComments /comments/post/:postId
 async function getPostComments(req, res, next) {
-  const { postId } = req.params;
+  try {
+    const { postId } = req.params;
 
-  const post = await prisma.post.findUnique({
-    where: { id: postId },
-    select: {
-      id: true,
-      comments: {
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      select: {
+        id: true,
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            author: {
+              select: {
+                id: true,
+                username: true,
+              },
+            },
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!post) {
-    throw new AppError("Post not found", 404);
+    if (!post) {
+      throw new AppError("Post not found", 404);
+    }
+
+    res.status(200).json({
+      success: true,
+      data: { comments: post.comments },
+    });
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).json({
-    success: true,
-    data: { comments: post.comments },
-  });
 }
 // createComment /comments/post/:postId
 async function createComment(req, res, next) {
   try {
     const { content } = req.body;
     const { postId } = req.params;
-    console.log(req.user);
+
+    const post = prisma.post.findUnique({
+      where: { id: postId },
+      select: { id: true },
+    });
+
+    if (!post) {
+      throw new AppError("Post not found", 404);
+    }
 
     const comment = await prisma.comment.create({
       data: {

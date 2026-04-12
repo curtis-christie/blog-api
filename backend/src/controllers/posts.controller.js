@@ -17,10 +17,6 @@ async function getAllPosts(req, res, next) {
       orderBy: { createdAt: "desc" },
     });
 
-    if (posts.length === 0) {
-      throw new AppError("There are no posts to show.", 404);
-    }
-
     res.status(200).json({
       success: true,
       data: { posts },
@@ -67,10 +63,6 @@ async function getOwnPosts(req, res, next) {
       },
       orderBy: { createdAt: "desc" },
     });
-
-    if (posts.length === 0) {
-      throw new AppError("You have no posts.", 404);
-    }
 
     res.status(200).json({
       success: true,
@@ -125,7 +117,6 @@ async function updatePost(req, res, next) {
   try {
     const { postId } = req.params;
     const userId = req.user.sub; // from JWT
-    console.log(userId);
     const post = await prisma.post.findUnique({
       where: { id: postId },
       select: { authorId: true },
@@ -134,7 +125,6 @@ async function updatePost(req, res, next) {
     if (!post) {
       throw new AppError("Post not found", 404);
     }
-    console.log(post.authorId);
 
     // Ownership check
     if (post.authorId !== userId) {
