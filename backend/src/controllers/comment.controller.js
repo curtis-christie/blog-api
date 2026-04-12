@@ -10,9 +10,14 @@ async function getComment(req, res, next) {
       where: { id: commentId },
       select: {
         id: true,
-        name: true,
         content: true,
         createdAt: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
       },
     });
 
@@ -32,13 +37,13 @@ async function getComment(req, res, next) {
 async function getPostComments(req, res, next) {
   const { postId } = req.params;
 
-  const comments = await prisma.post.findUnique({
+  const post = await prisma.post.findUnique({
     where: { id: postId },
     select: {
+      id: true,
       comments: {
         select: {
           id: true,
-          name: true,
           content: true,
           createdAt: true,
         },
@@ -46,19 +51,20 @@ async function getPostComments(req, res, next) {
     },
   });
 
-  if (!comments) {
-    throw new AppError("Post has no comments", 404);
+  if (!post) {
+    throw new AppError("Post not found", 404);
   }
 
   res.status(200).json({
     success: true,
-    data: { comments },
+    data: { comments: post.comments },
   });
 }
 // createComment /comments/post/:postId
 async function createComment(req, res, next) {
   try {
     const { content } = req.body;
+    const { postId } = req.params;
     console.log(req.user);
 
     const comment = await prisma.comment.create({

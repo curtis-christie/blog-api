@@ -67,7 +67,7 @@ async function login(req, res, next) {
       throw new AppError("Invalid Credentials", 401);
     }
 
-    const passwordMatches = comparePassword(password, user.passwordHash);
+    const passwordMatches = await comparePassword(password, user.passwordHash);
 
     if (!passwordMatches) {
       throw new AppError("Invalid Credentials", 401);

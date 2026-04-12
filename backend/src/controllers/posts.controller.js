@@ -17,7 +17,7 @@ async function getAllPosts(req, res, next) {
       orderBy: { createdAt: "desc" },
     });
 
-    if (!posts) {
+    if (posts.length === 0) {
       throw new AppError("There are no posts to show.", 404);
     }
 
@@ -68,7 +68,7 @@ async function getOwnPosts(req, res, next) {
       orderBy: { createdAt: "desc" },
     });
 
-    if (!posts) {
+    if (posts.length === 0) {
       throw new AppError("You have no posts.", 404);
     }
 
@@ -98,7 +98,7 @@ async function createPost(req, res, next) {
       data: {
         title,
         content,
-        authorId: req.user.sub,
+        authorId: authorId,
       },
       select: {
         id: true,
