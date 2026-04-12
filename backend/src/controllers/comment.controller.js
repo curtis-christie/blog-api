@@ -46,7 +46,7 @@ async function getPostComments(req, res, next) {
     },
   });
 
-  if (!posts) {
+  if (!comments) {
     throw new AppError("Post has no comments", 404);
   }
 
@@ -60,17 +60,18 @@ async function createComment(req, res, next) {
   try {
     const { content } = req.body;
     console.log(req.user);
-    const name = req.user.username ? req.user.username : "Anonymous";
 
     const comment = await prisma.comment.create({
       data: {
-        name,
         content,
+        authorId: req.user.sub,
+        postId,
       },
       select: {
         id: true,
-        name: true,
         content: true,
+        authorId: true,
+        postId: true,
         createdAt: true,
       },
     });
@@ -94,6 +95,10 @@ async function deleteComment(req, res, next) {
 
     if (!comment) {
       throw new AppError("No comment found", 404);
+    }
+
+    if (comment.authorId !== req.user.sub) {
+      throw new AppError("Not authorized to delete comment", 403);
     }
 
     const deletedComment = await prisma.comment.delete({
