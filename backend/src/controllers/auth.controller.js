@@ -151,7 +151,10 @@ async function refresh(req, res, next) {
       message: "Token refreshed",
     });
   } catch (error) {
-    next(new AppError("Invalid refresh token", 401));
+    if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+      return next(new AppError("Invalid refresh token", 401));
+    }
+    next(error);
   }
 }
 
