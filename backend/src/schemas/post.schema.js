@@ -10,9 +10,6 @@ const createPostSchema = z.object({
       .max(255, "Title must be no more than 255 characters."),
     content: z.string().trim().nonempty("Must include the body content in article."),
   }),
-  params: z.object({
-    authorId: z.string().min(1, "authorId is required"),
-  }),
 });
 
 const updatePostSchema = z.object({
@@ -26,7 +23,7 @@ const updatePostSchema = z.object({
     content: z.string().trim().nonempty("Must include the body content in article.").optional(),
   }),
   params: z.object({
-    id: z.string().min(1, "Post id is required."),
+    postId: z.string().min(1, "Post id is required."),
   }),
 });
 

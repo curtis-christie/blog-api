@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { AppError } from "../utils/appError.js";
 import { comparePassword, hashPassword } from "../utils/password.js";
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
 import { prisma } from "../lib/prisma.js";
 import { setAuthCookie } from "../utils/setAuthCookie.js";
 
@@ -33,13 +33,17 @@ async function register(req, res, next) {
       },
     });
 
-    const token = signAccessToken({
+    const accessToken = signAccessToken({
       sub: user.id,
       username: user.username,
       email: user.email,
     });
 
-    setAuthCookie(res, token);
+    const refreshToken = signRefreshToken({
+      sub: user.id,
+    });
+
+    setAuthCookie(res, accessToken, refreshToken);
 
     res.status(201).json({
       success: true,
@@ -69,13 +73,17 @@ async function login(req, res, next) {
       throw new AppError("Invalid Credentials", 401);
     }
 
-    const token = signAccessToken({
+    const accessToken = signAccessToken({
       sub: user.id,
       username: user.username,
       email: user.email,
     });
 
-    setAuthCookie(res, token);
+    const refreshToken = signRefreshToken({
+      sub: user.id,
+    });
+
+    setAuthCookie(res, accessToken, refreshToken);
 
     res.status(200).json({
       success: true,
@@ -100,7 +108,6 @@ async function logout(req, res, next) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      path: "/",
     });
 
     res.status(200).json({
@@ -109,6 +116,36 @@ async function logout(req, res, next) {
     });
   } catch (error) {
     next(error);
+  }
+}
+
+async function refresh(req, res, next) {
+  try {
+    const token = req.cookies.refreshToken;
+
+    if (!token) {
+      throw new AppError("No refresh token", 401);
+    }
+
+    const payload = verifyRefreshToken(token);
+
+    const newAccessToken = signAccessToken({
+      sub: payload.sub,
+    });
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 15,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Token refreshed",
+    });
+  } catch (error) {
+    next(new AppError("Invalid refresh token", 401));
   }
 }
 
@@ -137,4 +174,4 @@ async function me(req, res, next) {
   }
 }
 
-export { register, login, logout, me };
+export { register, login, logout, refresh, me };

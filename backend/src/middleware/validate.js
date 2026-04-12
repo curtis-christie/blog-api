@@ -9,6 +9,7 @@ export const validate = (schema) => {
     });
 
     if (!result.success) {
+      console.log(result.error.issues);
       return next(new AppError("Validation failed", 400, result.error.flatten()));
     }
 

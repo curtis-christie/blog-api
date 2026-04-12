@@ -10,7 +10,7 @@ export function requireAuth(req, res, next) {
     }
 
     const payload = verifyAccessToken(token);
-
+    console.log(req.body);
     req.user = payload;
     next();
   } catch (error) {
