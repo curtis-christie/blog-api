@@ -177,7 +177,7 @@ async function deletePost(req, res, next) {
       where: { id: postId },
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: { post: deletedPost },
     });
