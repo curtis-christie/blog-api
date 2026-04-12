@@ -9,14 +9,14 @@ async function register(req, res, next) {
   try {
     const { username, email, password } = req.body;
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findFirst({
       where: {
         OR: [{ email: email }, { username: username }],
       },
     });
 
     if (existingUser) {
-      throw new AppError("Email already in use", 409);
+      throw new AppError("Email or username already in use", 409);
     }
 
     const passwordHash = await hashPassword(password);
