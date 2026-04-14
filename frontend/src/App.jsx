@@ -1,13 +1,7 @@
-import "./App.css";
+import AppRouter from "./router/AppRouter.jsx";
 
 function App() {
-  return (
-    <>
-      <div>
-        <h1>Up and working</h1>
-      </div>
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;
