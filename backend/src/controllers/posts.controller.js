@@ -6,13 +6,21 @@ import { AppError } from "../utils/appError.js";
 async function getAllPosts(req, res, next) {
   try {
     const posts = await prisma.post.findMany({
+      where: { isPublished: true },
       select: {
         id: true,
         title: true,
         content: true,
-        comments: true,
+        isPublished: true,
         createdAt: true,
         updatedAt: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        comments: true,
       },
       orderBy: { createdAt: "desc" },
     });
@@ -117,9 +125,10 @@ async function updatePost(req, res, next) {
   try {
     const { postId } = req.params;
     const userId = req.user.sub; // from JWT
+    const { title, content, isPublished } = req.body;
+
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      select: { authorId: true },
     });
 
     if (!post) {
@@ -131,9 +140,23 @@ async function updatePost(req, res, next) {
       throw new AppError("Not authorized to update this post", 403);
     }
 
+    if (title && title !== post.title) {
+      const existingPost = await prisma.post.findUnique({
+        where: { title },
+      });
+
+      if (existingPost) {
+        throw new AppError("A post with that title already exists", 409);
+      }
+    }
+
     const updatedPost = await prisma.post.update({
       where: { id: postId },
-      data: req.body,
+      data: {
+        ...(title !== undefined && { title }),
+        ...(content !== undefined && { content }),
+        ...(isPublished !== undefined && { isPublished }),
+      },
     });
 
     res.status(200).json({

@@ -21,6 +21,7 @@ const updatePostSchema = z.object({
       .max(255, "Title must be no more than 255 characters.")
       .optional(),
     content: z.string().trim().nonempty("Must include the body content in article.").optional(),
+    isPublished: z.boolean().optional(),
   }),
   params: z.object({
     postId: z.string().min(1, "Post id is required."),
