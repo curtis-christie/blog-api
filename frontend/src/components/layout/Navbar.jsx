@@ -46,7 +46,7 @@ function Navbar() {
                 New Post
               </NavLink>
 
-              <span className="navbar__user">Hi, {user.username}</span>
+              <span className="navbar__user">Hi, {user?.username}</span>
 
               <button type="button" onClick={handleLogout} className="nav-button">
                 Logout

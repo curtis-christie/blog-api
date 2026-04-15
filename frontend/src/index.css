@@ -136,3 +136,45 @@ h1 {
   margin: 0;
   color: #ff8d8d;
 }
+
+.post-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.post-card {
+  border: 1px solid #2b2b2b;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background-color: #151515;
+}
+
+.post-card__header {
+  margin-bottom: 0.75rem;
+}
+
+.post-card__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+}
+
+.post-card__meta {
+  margin: 0;
+  color: #b5b5b5;
+  font-size: 0.95rem;
+}
+
+.post-card__content {
+  margin-bottom: 1rem;
+}
+
+.post-card__content p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.post-card__footer {
+  display: flex;
+  justify-content: flex-end;
+}

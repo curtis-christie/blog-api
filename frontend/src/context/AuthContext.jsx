@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
     async function checkAuth() {
       try {
         const data = await getCurrentUser();
-        setUser(data.user ?? data);
+        setUser(data.data.user ?? data);
       } catch {
         setUser(null);
       } finally {
@@ -23,13 +23,13 @@ export function AuthProvider({ children }) {
 
   async function login(formData) {
     const data = await loginUser(formData);
-    setUser(data.user ?? data);
+    setUser(data.data.user ?? data);
     return data;
   }
 
   async function register(formData) {
     const data = await registerUser(formData);
-    setUser(data.user ?? data);
+    setUser(data.data.user ?? data);
     return data;
   }
 
@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
 
   async function refreshUser() {
     const data = await getCurrentUser();
-    setUser(data.user ?? data);
+    setUser(data.data.user ?? data);
     return data;
   }
 
