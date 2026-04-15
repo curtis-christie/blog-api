@@ -35,7 +35,7 @@ async function getAllPosts(req, res, next) {
 async function getPost(req, res, next) {
   try {
     const { postId } = req.params;
-    const userId = req.user.sub;
+    const userId = req.user?.sub;
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
@@ -45,7 +45,7 @@ async function getPost(req, res, next) {
       throw new AppError("No post found", 404);
     }
 
-    if (!isPublished && post.authorId !== userId) {
+    if (!post.isPublished && post.authorId !== userId) {
       throw new AppError("No post found", 404);
     }
 
