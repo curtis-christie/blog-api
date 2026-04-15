@@ -55,11 +55,9 @@ function ProfilePage() {
     try {
       setTogglingPostId(post.id);
 
-      const data = await updatePost(post.id, {
+      await updatePost(post.id, {
         isPublished: !post.isPublished,
       });
-
-      const updatedPost = data.post;
 
       setPosts((prevPosts) =>
         prevPosts.map((p) => (p.id === post.id ? { ...p, isPublished: !p.isPublished } : p)),

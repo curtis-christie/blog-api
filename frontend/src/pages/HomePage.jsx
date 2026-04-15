@@ -13,16 +13,7 @@ function HomePage() {
         setErrorMessage("");
         const data = await getAllPosts();
 
-        const postsArray = Array.isArray(data)
-          ? data
-          : Array.isArray(data.data)
-            ? data.data
-            : Array.isArray(data.data?.posts)
-              ? data.data.posts
-              : Array.isArray(data.posts)
-                ? data.posts
-                : [];
-        setPosts(postsArray);
+        setPosts(data.posts);
       } catch (error) {
         setErrorMessage(error.message || "Failed to load posts.");
       } finally {

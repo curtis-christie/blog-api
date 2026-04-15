@@ -20,7 +20,6 @@ async function getAllPosts(req, res, next) {
             username: true,
           },
         },
-        comments: true,
       },
       orderBy: { createdAt: "desc" },
     });
@@ -42,7 +41,7 @@ async function getPost(req, res, next) {
       where: { id: postId },
     });
 
-    if (!post) {
+    if (!post || !post.isPublished) {
       throw new AppError("No post found", 404);
     }
 

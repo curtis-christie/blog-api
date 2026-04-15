@@ -16,11 +16,7 @@ function PostCard({ post }) {
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
   function extractCommentsArray(data) {
-    if (Array.isArray(data)) return data;
-    if (Array.isArray(data.data)) return data.data;
-    if (Array.isArray(data.comments)) return data.comments;
-    if (Array.isArray(data.data?.comments)) return data.data.comments;
-    return [];
+    return data.comments;
   }
 
   async function handleToggleComments() {
@@ -52,7 +48,7 @@ function PostCard({ post }) {
 
       const data = await createComment(post.id, commentData);
 
-      const newComment = data?.data?.comment ?? data?.comment ?? data?.data ?? data;
+      const newComment = data.comment;
 
       setComments((prevComments) => [newComment, ...prevComments]);
       setCommentsLoaded(true);

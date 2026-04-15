@@ -16,7 +16,7 @@ function EditPostPage() {
       try {
         setErrorMessage("");
         const data = await getPost(postId);
-        setPost(data.data.post);
+        setPost(data.post);
       } catch (error) {
         setErrorMessage(error.message || "Failed to load post.");
       } finally {

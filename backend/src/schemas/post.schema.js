@@ -9,6 +9,7 @@ const createPostSchema = z.object({
       .min(3, "Title must be at least 3 characters long")
       .max(255, "Title must be no more than 255 characters."),
     content: z.string().trim().nonempty("Must include the body content in article."),
+    isPublished: z.boolean().optional(),
   }),
 });
 
