@@ -2,7 +2,15 @@ import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.js";
 
 function Navbar() {
-  const { isAuthenticated, logout, demoLogin, user } = useAuth();
+  const { isAuthenticated, logout, isLoading, user } = useAuth();
+
+  async function handleLogout() {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error.message);
+    }
+  }
 
   return (
     <header>
@@ -16,7 +24,9 @@ function Navbar() {
             Home
           </NavLink>
 
-          {!isAuthenticated ? (
+          {isLoading ? (
+            <span className="navbar__user">Loading...</span>
+          ) : !isAuthenticated ? (
             <>
               <NavLink to="/login" className="nav-link">
                 Login
@@ -25,10 +35,6 @@ function Navbar() {
               <NavLink to="/register" className="nav-link">
                 Register
               </NavLink>
-
-              <button type="button" onClick={demoLogin} className="nav-button">
-                Demo Login
-              </button>
             </>
           ) : (
             <>
@@ -40,9 +46,9 @@ function Navbar() {
                 New Post
               </NavLink>
 
-              <span className="navbar__user">Hi, {user?.username}</span>
+              <span className="navbar__user">Hi, {user.username}</span>
 
-              <button type="button" onClick={logout} className="nav-button">
+              <button type="button" onClick={handleLogout} className="nav-button">
                 Logout
               </button>
             </>

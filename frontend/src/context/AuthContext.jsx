@@ -1,27 +1,50 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AuthContext } from "./authContext.js";
+import { getCurrentUser, loginUser, logoutUser, registerUser } from "../api/auth.js";
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("demoUser");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-  const [isLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  function demoLogin() {
-    const fakeUser = {
-      id: 1,
-      username: "demoUser",
-      email: "demo@example.com",
-    };
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const data = await getCurrentUser();
+        setUser(data.user ?? data);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-    localStorage.setItem("demoUser", JSON.stringify(fakeUser));
-    setUser(fakeUser);
+    checkAuth();
+  }, []);
+
+  async function login(formData) {
+    const data = await loginUser(formData);
+    setUser(data.user ?? data);
+    return data;
   }
 
-  function logout() {
-    localStorage.removeItem("demoUser");
-    setUser(null);
+  async function register(formData) {
+    const data = await registerUser(formData);
+    setUser(data.user ?? data);
+    return data;
+  }
+
+  async function logout() {
+    try {
+      await logoutUser();
+    } finally {
+      setUser(null);
+    }
+  }
+
+  async function refreshUser() {
+    const data = await getCurrentUser();
+    setUser(data.user ?? data);
+    return data;
   }
 
   const value = useMemo(() => {
@@ -29,8 +52,10 @@ export function AuthProvider({ children }) {
       user,
       isAuthenticated: Boolean(user),
       isLoading,
-      demoLogin,
+      login,
+      register,
       logout,
+      refreshUser,
     };
   }, [user, isLoading]);
 
