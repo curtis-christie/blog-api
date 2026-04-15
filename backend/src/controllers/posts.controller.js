@@ -65,6 +65,7 @@ async function getOwnPosts(req, res, next) {
         id: true,
         title: true,
         content: true,
+        isPublished: true,
         comments: true,
         createdAt: true,
         updatedAt: true,
