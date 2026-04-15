@@ -178,3 +178,49 @@ h1 {
   display: flex;
   justify-content: flex-end;
 }
+
+.post-card__comments {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #2b2b2b;
+  display: grid;
+  gap: 1rem;
+}
+
+.comment-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.comment-card {
+  border: 1px solid #2f2f2f;
+  border-radius: 0.6rem;
+  padding: 0.8rem;
+  background-color: #101010;
+}
+
+.comment-card__meta {
+  margin: 0 0 0.4rem;
+  color: #b5b5b5;
+  font-size: 0.9rem;
+}
+
+.comment-card__content {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.comment-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.comment-empty {
+  margin: 0;
+  color: #bdbdbd;
+}
+
+.comment-login-message {
+  margin: 0;
+  color: #cfcfcf;
+}
