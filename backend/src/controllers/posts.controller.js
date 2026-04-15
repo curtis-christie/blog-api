@@ -84,7 +84,7 @@ async function getOwnPosts(req, res, next) {
 // createPost /api/posts/
 async function createPost(req, res, next) {
   try {
-    const { title, content } = req.body;
+    const { title, content, isPublished } = req.body;
     const authorId = req.user.sub;
 
     const existingPost = await prisma.post.findUnique({
@@ -99,6 +99,7 @@ async function createPost(req, res, next) {
       data: {
         title,
         content,
+        isPublished: isPublished ?? false,
         authorId: authorId,
       },
       select: {
