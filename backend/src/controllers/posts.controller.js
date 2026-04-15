@@ -39,6 +39,15 @@ async function getPost(req, res, next) {
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        isPublished: true,
+        authorId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     if (!post) {
