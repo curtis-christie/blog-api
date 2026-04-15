@@ -94,9 +94,13 @@ async function createComment(req, res, next) {
       select: {
         id: true,
         content: true,
-        authorId: true,
-        postId: true,
         createdAt: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
       },
     });
 

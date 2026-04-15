@@ -27,6 +27,7 @@ function CommentForm({ onSubmit, isSubmitting }) {
           onChange={(event) => setContent(event.target.value)}
           rows="3"
           required
+          disabled={isSubmitting}
         />
       </label>
 

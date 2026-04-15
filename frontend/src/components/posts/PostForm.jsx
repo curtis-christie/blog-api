@@ -41,7 +41,14 @@ function PostForm({
     <form onSubmit={handleSubmit} className="auth-form">
       <label className="form-field">
         <span>Title</span>
-        <input type="text" name="title" value={formData.title} onChange={handleChange} required />
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+          disabled={isSubmitting}
+        />
       </label>
 
       <label className="form-field">
@@ -52,6 +59,7 @@ function PostForm({
           onChange={handleChange}
           rows="10"
           required
+          disabled={isSubmitting}
         />
       </label>
 
@@ -65,7 +73,7 @@ function PostForm({
         <span>Publish this post</span>
       </label>
 
-      {errorMessage ? <p className="form-error">{errorMessage}</p> : null}
+      {errorMessage && <p className="form-error">{errorMessage}</p>}
 
       <button type="submit" className="nav-button" disabled={isSubmitting}>
         {isSubmitting ? "Saving..." : submitLabel}

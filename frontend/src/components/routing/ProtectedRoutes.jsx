@@ -5,7 +5,11 @@ function ProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return <p>Checking authentication...</p>;
+    return (
+      <div className="centered-message">
+        <p>Checking authentication...</p>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

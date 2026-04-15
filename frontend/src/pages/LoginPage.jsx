@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -13,6 +13,12 @@ function LoginPage() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      navigate("/profile");
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -51,6 +57,7 @@ function LoginPage() {
             value={formData.email}
             onChange={handleChange}
             required
+            disabled={isSubmitting}
           />
         </label>
 
@@ -62,10 +69,11 @@ function LoginPage() {
             value={formData.password}
             onChange={handleChange}
             required
+            disabled={isSubmitting}
           />
         </label>
 
-        {errorMessage ? <p className="form-error">{errorMessage}</p> : null}
+        {errorMessage && <p className="form-error">{errorMessage}</p>}
 
         <button type="submit" className="nav-button" disabled={isSubmitting}>
           {isSubmitting ? "Logging in..." : "Login"}

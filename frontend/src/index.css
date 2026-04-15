@@ -282,3 +282,10 @@ h1 {
 .danger-button:hover {
   background-color: #4a2424;
 }
+
+.centered-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}

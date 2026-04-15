@@ -19,7 +19,7 @@ function ProfilePage() {
       try {
         setErrorMessage("");
         const data = await getOwnPosts();
-        setPosts(data.data.posts);
+        setPosts(data.posts);
       } catch (error) {
         setErrorMessage(error.message || "Failed to load your posts.");
       } finally {
@@ -59,7 +59,7 @@ function ProfilePage() {
         isPublished: !post.isPublished,
       });
 
-      const updatedPost = data.data.post;
+      const updatedPost = data.post;
 
       setPosts((prevPosts) =>
         prevPosts.map((currentPost) => (currentPost.id === post.id ? updatedPost : currentPost)),
@@ -93,7 +93,7 @@ function ProfilePage() {
         </button>
       </div>
 
-      {errorMessage ? <p className="form-error">{errorMessage}</p> : null}
+      {errorMessage && <p className="form-error">{errorMessage}</p>}
 
       {posts.length === 0 ? (
         <p>You have not created any posts yet.</p>

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, isAuthenticated, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -14,6 +14,12 @@ function RegisterPage() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      navigate("/profile");
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -52,6 +58,7 @@ function RegisterPage() {
             value={formData.username}
             onChange={handleChange}
             required
+            disabled={isSubmitting}
           />
         </label>
 
@@ -63,6 +70,7 @@ function RegisterPage() {
             value={formData.email}
             onChange={handleChange}
             required
+            disabled={isSubmitting}
           />
         </label>
 
@@ -74,10 +82,11 @@ function RegisterPage() {
             value={formData.password}
             onChange={handleChange}
             required
+            disabled={isSubmitting}
           />
         </label>
 
-        {errorMessage ? <p className="form-error">{errorMessage}</p> : null}
+        {errorMessage && <p className="form-error">{errorMessage}</p>}
 
         <button type="submit" className="nav-button" disabled={isSubmitting}>
           {isSubmitting ? "Creating account..." : "Register"}

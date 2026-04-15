@@ -1,5 +1,15 @@
 const API_BASE_URL = "http://localhost:3001/api";
 
+function normalizeResponse(data) {
+  if (!data) return data;
+
+  if (data.data) {
+    return data.data;
+  }
+
+  return data;
+}
+
 export async function apiRequest(endpoint, options = {}) {
   const config = {
     method: options.method || "GET",
@@ -22,10 +32,10 @@ export async function apiRequest(endpoint, options = {}) {
   }
 
   if (!response.ok) {
-    const errorMessage =
-      responseData?.message || responseData?.error || "Something went wrong with the request.";
+    const errorMessage = responseData?.message || responseData?.error || "Request failed.";
+
     throw new Error(errorMessage);
   }
 
-  return responseData;
+  return normalizeResponse(responseData);
 }
