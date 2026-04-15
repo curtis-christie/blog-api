@@ -62,7 +62,7 @@ function ProfilePage() {
       const updatedPost = data.post;
 
       setPosts((prevPosts) =>
-        prevPosts.map((currentPost) => (currentPost.id === post.id ? updatedPost : currentPost)),
+        prevPosts.map((p) => (p.id === post.id ? { ...p, isPublished: !p.isPublished } : p)),
       );
     } catch (error) {
       setErrorMessage(error.message || "Failed to update publish status.");
@@ -96,7 +96,7 @@ function ProfilePage() {
       {errorMessage && <p className="form-error">{errorMessage}</p>}
 
       {posts.length === 0 ? (
-        <p>You have not created any posts yet.</p>
+        <p>You have not created any posts yet. Click "Create New Post" to get started.</p>
       ) : (
         <div className="post-list">
           {posts.map((post) => (

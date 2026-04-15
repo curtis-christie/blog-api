@@ -55,7 +55,7 @@ function HomePage() {
     return (
       <section>
         <h1>Home</h1>
-        <p>No published posts yet.</p>
+        <p>No posts yet. Be the first to publish something.</p>
       </section>
     );
   }
