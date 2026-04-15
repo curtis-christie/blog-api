@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { prisma } from "../lib/prisma.js";
 import { AppError } from "../utils/appError.js";
 
@@ -36,12 +35,17 @@ async function getAllPosts(req, res, next) {
 async function getPost(req, res, next) {
   try {
     const { postId } = req.params;
+    const userId = req.user.sub;
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
     });
 
-    if (!post || !post.isPublished) {
+    if (!post) {
+      throw new AppError("No post found", 404);
+    }
+
+    if (!isPublished && post.authorId !== userId) {
       throw new AppError("No post found", 404);
     }
 
@@ -65,7 +69,6 @@ async function getOwnPosts(req, res, next) {
         title: true,
         content: true,
         isPublished: true,
-        comments: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -99,7 +102,7 @@ async function createPost(req, res, next) {
         title,
         content,
         isPublished: isPublished ?? false,
-        authorId: authorId,
+        authorId,
       },
       select: {
         id: true,

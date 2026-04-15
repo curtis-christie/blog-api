@@ -15,10 +15,6 @@ function PostCard({ post }) {
   const [commentsError, setCommentsError] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
-  function extractCommentsArray(data) {
-    return data.comments;
-  }
-
   async function handleToggleComments() {
     const nextOpenState = !isCommentsOpen;
     setIsCommentsOpen(nextOpenState);
@@ -29,9 +25,8 @@ function PostCard({ post }) {
         setIsLoadingComments(true);
 
         const data = await getCommentsByPost(post.id);
-        const commentsArray = extractCommentsArray(data);
 
-        setComments(commentsArray);
+        setComments(data.comments);
         setCommentsLoaded(true);
       } catch (error) {
         setCommentsError(error.message || "Failed to load comments.");

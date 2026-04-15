@@ -4,7 +4,7 @@ import Layout from "../components/layout/Layout.jsx";
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
-import ProtectedRoute from "../components/routing/ProtectedRoutes.jsx";
+import ProtectedRoute from "../components/routing/ProtectedRoute.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 import CreatePostPage from "../pages/CreatePostPage.jsx";
 import EditPostPage from "../pages/EditPostPage.jsx";
